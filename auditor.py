@@ -10,6 +10,7 @@ while count != "quit":
             print("Warning: Stock quantity exceeds 500!")
         else:
             inventory += int(count)
+            print("Total Units Processed:", inventory)
     elif count.lower() == "quit":
         print("Total Units Processed:", inventory)
         print("Failed Entries:", failedEntries)
