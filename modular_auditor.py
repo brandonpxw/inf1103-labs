@@ -1,26 +1,20 @@
 def get_valid_input():
-    user_input = input("Enter the stock quantity (or type 'quit' to exit): ").strip()
-    
-    if user_input.lower() == "quit":
-        return "QUIT"
-    
+    user_input = input("Enter the stock quantity (or type 'quit' to exit): ")
     if user_input.isdigit():
-        val = int(user_input)
-        if val > 500:
+        if int(user_input) > 500:
             print("Warning: Stock quantity exceeds 500!")
-            return None
-        elif val > 0:
-            return val
-            
-    print("Invalid input. Please enter a number or 'quit'.")
-    return None
+        elif int(user_input) > 0:
+            return int(user_input)
+    elif user_input.lower() == "quit":
+        return "quit"
+    else:
+        print("Invalid input. Please enter a number or 'quit'.")
+        return None
 
 def process_delivery(current_total, new_value):
-    """Calculates and returns the updated total units."""
     return current_total + new_value
 
 def calculate_tax(amount):
-    """Calculates 10% tax on a given delivery amount."""
     tax_rate = 0.10
     return amount * tax_rate
 
@@ -39,7 +33,7 @@ def main():
     while True:
         result = get_valid_input()
 
-        if result == "QUIT":
+        if result == "quit":
             break
         elif result is None:
             failed_entries += 1
