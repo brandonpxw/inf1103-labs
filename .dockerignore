@@ -1,0 +1,23 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# IDE settings
+.vscode/
+.idea/
+
+# Not needed inside the image
+Submissions/
+earlier-labs/
+README.md
+Dockerfile
+.dockerignore
+*.tmp
