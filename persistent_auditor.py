@@ -36,7 +36,6 @@ def display_inventory():
             else:
                 print("\nCurrent Orders:")
                 print(orders_data)
-                # Count existing lines to calculate next order ID
                 line_count = len(orders_data.splitlines())
                 return 1001 + line_count
     else:

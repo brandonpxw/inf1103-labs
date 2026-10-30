@@ -1,0 +1,4 @@
+1001, Keyboard, 1
+1002, Mouse, 2
+1003, USB Cable, 3
+1004, Laptop, 4

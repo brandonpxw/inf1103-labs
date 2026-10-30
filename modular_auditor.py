@@ -19,7 +19,6 @@ def calculate_tax(amount):
     return amount * tax_rate
 
 def generate_report(total_units, failed_attempts):
-    """Prints the final summary report."""
     print("\n----- Delivery Report -----")
     print("Total Units Processed:", total_units)
     print("Failed/Rejected Entries:", failed_attempts)
