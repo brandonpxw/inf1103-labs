@@ -1,5 +1,7 @@
+from can_be_shipped import CanBeShipped
+from digital_product import DigitalProduct
 from file_handler import load_inventory, save_inventory
-from product import Product
+from physical_product import PhysicalProduct
 
 FILE = "data/inventory.json"
 
@@ -15,15 +17,61 @@ def display_menu():
     print("----------------------------")
 
 
+def ask_text(prompt):
+    # Keep asking until something non-blank is entered.
+    while True:
+        value = input(prompt).strip()
+        if value:
+            return value
+        print("This field cannot be empty.")
+
+
+def ask_number(prompt, number_type, minimum, allow_minimum=True):
+    # Keep asking until a valid number at/above the minimum is entered.
+    while True:
+        try:
+            value = number_type(input(prompt))
+        except ValueError:
+            kind = "whole number" if number_type is int else "number"
+            print(f"Invalid input. Please enter a {kind}.")
+            continue
+        if value > minimum or (allow_minimum and value == minimum):
+            return value
+        rule = "0 or more" if allow_minimum else "greater than 0"
+        print(f"Invalid input. Value must be {rule}.")
+
+
 def add_product(inventory):
     print("\nAdd New Product:")
+    print("1. Physical Product")
+    print("2. Digital Product")
+    product_type = input("Choose product type: ").strip()
+    if product_type not in ("1", "2"):
+        print("Invalid product type. Please enter 1 or 2.")
+        return
+
+    while True:
+        product_id = ask_text("Product ID: ")
+        if inventory.search_product(product_id) is None:
+            break
+        print(f"A product with ID {product_id} already exists. Please enter a different ID.")
+
+    while True:
+        name = ask_text("Product Name: ")
+        if any(char.isalpha() for char in name):
+            break
+        print("Invalid name. It must contain at least one letter.")
+    price = ask_number("Price: $", float, 0)
+    stock = ask_number("Stock Quantity: ", int, 0)
+
     try:
-        product_id = input("Product ID: ").strip()
-        name = input("Product Name: ").strip()
-        price = float(input("Price: $"))
-        stock = int(input("Stock Quantity: "))
-        product = Product(product_id, name, price, stock)
-    except ValueError as error:
+        if product_type == "1":
+            weight = ask_number("Weight (kg): ", float, 0, allow_minimum=False)
+            product = PhysicalProduct(product_id, name, price, stock, weight)
+        else:
+            download_size = ask_number("Download Size (MB): ", float, 0, allow_minimum=False)
+            product = DigitalProduct(product_id, name, price, stock, download_size)
+    except ValueError as error:  # the product classes still have the final say
         print(f"Invalid input. {error}")
         return
 
@@ -59,6 +107,9 @@ def search_product(inventory):
     print("Product Found:")
     print("------------------------------------------------")
     product.display_information()
+    print(f"Fulfilment: {product.get_fulfilment_info()}")
+    if isinstance(product, CanBeShipped):
+        print(f"Shipping Cost: ${product.calculate_shipping_cost():.2f}")
     print("------------------------------------------------")
 
 
